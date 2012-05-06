@@ -60,6 +60,13 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Images\Blocker.png">
+      <Name>Blocker</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
     <Compile Include="Images\GameOverScreen.png">
       <Name>GameOverScreen</Name>
       <Importer>TextureImporter</Importer>
