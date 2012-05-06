@@ -273,8 +273,8 @@ namespace Touchdown
                        // tacklers.RemoveAt(s);
                        // blockers.RemoveAt(b);
 
-                        tacklers[b].Velocity = -GameManager.GetFieldSpeed();
-                        tacklers[b].Blocked = true;
+                        tacklers[s].Velocity = -GameManager.GetFieldSpeed();
+                        tacklers[s].Blocked = true;
                         blockers[b].Velocity = GameManager.GetFieldSpeed();
                         blockers[b].Blocked = true;
 
