@@ -32,7 +32,9 @@ namespace Touchdown
         Runner runner;
         TacklerCollection tacklers;
         FieldCollection field;
+        BlockerCollection blockers;
 
+        
 
         public TouchdownGame()
         {
@@ -75,6 +77,9 @@ namespace Touchdown
             // TODO: use this.Content to load your game content here
             field = new FieldCollection(spriteBatch, this.Content.Load<Texture2D>("Images/BackgroundLight"), this.Content.Load<Texture2D>("Images/BackgroundDark"));
             tacklers = new TacklerCollection(spriteBatch, this.Content.Load<Texture2D>("Images/Tackler"));
+
+            blockers = new BlockerCollection(spriteBatch, this.Content.Load<Texture2D>("Images/Runner"));
+
             runner = new Runner(spriteBatch, this.Content.Load<Texture2D>("Images/Runner"));
 
             // Screen elements
@@ -173,6 +178,7 @@ namespace Touchdown
             field.Update(gameTime);
             runner.Update(gameTime);
             tacklers.Update(gameTime);
+            blockers.Update(gameTime);
 
             CheckForCollisions();
         }
@@ -210,7 +216,7 @@ namespace Touchdown
             field.Draw(gameTime);
             runner.Draw(gameTime);
             tacklers.Draw(gameTime);
-
+            blockers.Draw(gameTime);
             DrawScore();
             switch (GameManager.GameScreen)
             {
@@ -244,7 +250,7 @@ namespace Touchdown
                 {
                     tacklers.RemoveAt(s);
                 }
-                else if (tackler.CurrentRectangle.Intersects(runner.CurrentRectangle))
+                else if (tackler.CurrentRectangle.Intersects(runner.CurrentRectangle) && !tackler.Blocked)
                 {
                     //CRUD! The StickMan collided with us!!!!
                     runner.RecordHit(tackler);
@@ -259,6 +265,20 @@ namespace Touchdown
                     //explosions.CreateRobotExplosion(robot);
                     //Since we already know we've collided, break out the of the loop
                     break;
+                }
+                for (int b = 0; b < blockers.Count; b++)
+                {
+                    if (tackler.CurrentRectangle.Intersects(blockers[b].CurrentRectangle))
+                    {
+                       // tacklers.RemoveAt(s);
+                       // blockers.RemoveAt(b);
+
+                        tacklers[b].Velocity = -GameManager.GetFieldSpeed();
+                        tacklers[b].Blocked = true;
+                        blockers[b].Velocity = GameManager.GetFieldSpeed();
+                        blockers[b].Blocked = true;
+
+                    }
                 }
             }
 

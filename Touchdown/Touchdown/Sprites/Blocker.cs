@@ -3,16 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework;
 using PingDevelopment.Framework;
 
-namespace Touchdown.Enemies
+namespace Touchdown.Collections
 {
-    public partial class Tackler : Sprite
+    class Blocker : Sprite
     {
-        public bool Blocked { get; set; }
+         public bool Blocked { get; set; }
 
-        public Tackler(SpriteBatch SpriteBatch, Texture2D Texture)
+        public Blocker(SpriteBatch SpriteBatch, Texture2D Texture)
             : base(SpriteBatch, Texture)
         {
         }
@@ -24,7 +23,7 @@ namespace Touchdown.Enemies
             //back to the top when they go off the bottom
 
             //Update their position based on their velocity
-            Position += Velocity;
+            Position -= Velocity;
 
             //Bounce off the left and right sides
             if (Position.X <= 0)
@@ -39,10 +38,11 @@ namespace Touchdown.Enemies
             }
 
             //Wrap from the bottom to the top
-            if (this.IsAlive && (Position.Y == (GameManager.ScreenBottom + Height)))
+            if (this.IsAlive && (Position.Y >= (0 + Height)))
             {
+                
                 // Update the score
-                GameManager.Score += this.PointValue;
+               // GameManager.Score += this.PointValue;
                 //this.IsAlive = false;
             }
         }
