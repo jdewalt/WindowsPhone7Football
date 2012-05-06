@@ -34,7 +34,11 @@ namespace Touchdown
         FieldCollection field;
         BlockerCollection blockers;
 
-        
+        Song gameStartWinSound;
+        Song gameOverSound;
+        Song gameTrack; 
+
+
 
         public TouchdownGame()
         {
@@ -88,7 +92,9 @@ namespace Touchdown
             //welcomeScreen = Content.Load<Texture2D>("Images/WelcomeScreen");
             pauseScreen = Content.Load<Texture2D>("Images/PauseScreen");
             gameOverScreen = Content.Load<Texture2D>("Images/GameOverScreen");
-            //gameOverSound = Content.Load<SoundEffect>("Sounds/GameOverSound");
+            //gameOverSound = Content.Load<Song>("Sounds/GameOver");
+            //gameStartWinSound = Content.Load<Song>("Sounds/GameStartWin");
+            gameTrack = Content.Load<Song>("Sounds/Cheering");
 
             //GameManager.GameScreen = GameScreens.Welcome;
             StartGame();
@@ -143,6 +149,12 @@ namespace Touchdown
 
         private void UpdateGameOverScreen(GameTime gameTime)
         {
+            if (MediaPlayer.State == MediaState.Playing)
+            {
+                MediaPlayer.IsRepeating = true;
+                MediaPlayer.Stop();
+            }
+
             //When the game over screen is showing,
             //a tap any where on the screen should start the game.
             if (InputManager.IsNewTap)
@@ -169,6 +181,13 @@ namespace Touchdown
         /// <param name="gameTime"></param>
         private void UpdateGamePlayScreen(GameTime gameTime)
         {
+            // Load media
+            if (MediaPlayer.State != MediaState.Playing)
+            {
+                MediaPlayer.IsRepeating = true;
+                MediaPlayer.Play(gameTrack);
+            }
+
             // Allows the game to exit
             if (InputManager.IsBackButtonPressed)
                 GameManager.GameScreen = GameScreens.Pause;
@@ -185,6 +204,12 @@ namespace Touchdown
 
         private void UpdatePauseScreen(GameTime gameTime)
         {
+            if (MediaPlayer.State == MediaState.Playing)
+            {
+                MediaPlayer.IsRepeating = true;
+                MediaPlayer.Stop();
+            }
+
             //When the pause screen is showing,
             //a tap any where on the screen should resume the game.
             if (InputManager.IsNewTap)
@@ -257,7 +282,7 @@ namespace Touchdown
                     tacklers.RemoveAt(s);
 
                     //TODO: Play the StickMan explosion
-                    //explosions.CreateStickManExplosion(stickMan);
+                    //gameOverSound.Play();
                     //Record the hit on the robot...
                     GameManager.GameScreen = GameScreens.GameOver;
 
@@ -327,6 +352,8 @@ namespace Touchdown
         /// </summary>
         private void StartGame()
         {
+            
+            //gameStartWinSound.Play();
             //Clear the collections:
             tacklers.Clear();
             
