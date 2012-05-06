@@ -90,6 +90,13 @@ namespace PingDevelopment.Framework
         /// </summary>
         public static double NextLevelScore;
 
+
+        public static Vector2 GetFieldSpeed()
+        {
+            return new Vector2(0,-1);
+
+        }
+
         /// <summary>
         /// Change the level related fields with new level
         /// </summary>

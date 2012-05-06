@@ -65,6 +65,8 @@
     <Reference Include="System.Net" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Collections\BlockerCollection.cs" />
+    <Compile Include="Sprites\Blocker.cs" />
     <Compile Include="Collections\FieldCollection.cs" />
     <Compile Include="Collections\TacklerCollection.cs" />
     <Compile Include="Enemies\Tackler.cs" />
