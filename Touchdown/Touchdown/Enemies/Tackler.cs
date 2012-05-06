@@ -37,7 +37,7 @@ namespace Touchdown.Enemies
             }
 
             //Wrap from the bottom to the top
-            if (this.IsAlive && (Position.Y >= (GameManager.ScreenBottom + Height)))
+            if (this.IsAlive && (Position.Y == (GameManager.ScreenBottom + Height)))
             {
                 // Update the score
                 GameManager.Score += this.PointValue;

@@ -33,9 +33,10 @@ namespace Touchdown.Sprites
             Position += Velocity;
 
             //Wrap from the bottom to the top
-            if (this.IsAlive && (Position.Y >= GameManager.ScreenBottom))
+            if (this.IsAlive && (Position.Y == (GameManager.ScreenBottom + Height)))
             {
-                GameManager.Score += 10;
+                GameManager.Score += this.PointValue;
+                this.LivesRemaining--;
                 //this.IsAlive = false;
             }
         }

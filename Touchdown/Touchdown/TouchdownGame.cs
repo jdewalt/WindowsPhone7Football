@@ -81,8 +81,8 @@ namespace Touchdown
             scoreFont = Content.Load<SpriteFont>("Fonts/ScoreFont");
 
             //welcomeScreen = Content.Load<Texture2D>("Images/WelcomeScreen");
-            //pauseScreen = Content.Load<Texture2D>("Images/PauseScreen");
-            //gameOverScreen = Content.Load<Texture2D>("Images/GameOverScreen");
+            pauseScreen = Content.Load<Texture2D>("Images/PauseScreen");
+            gameOverScreen = Content.Load<Texture2D>("Images/GameOverScreen");
             //gameOverSound = Content.Load<SoundEffect>("Sounds/GameOverSound");
 
             //GameManager.GameScreen = GameScreens.Welcome;
@@ -105,9 +105,10 @@ namespace Touchdown
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
+            InputManager.Update();
             // Allows the game to exit
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
-                this.Exit();
+            //if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
+            //    this.Exit();
 
             // TODO: Add your update logic here
             switch (GameManager.GameScreen)
@@ -116,13 +117,13 @@ namespace Touchdown
                 //    UpdateWelcomeScreen(gameTime);
                 //    break;
 
-                //case GameScreens.Pause:
-                //    UpdatePauseScreen(gameTime);
-                //    break;
+                case GameScreens.Pause:
+                    UpdatePauseScreen(gameTime);
+                    break;
 
                 case GameScreens.GameOver:
-                    //UpdateGameOverScreen(gameTime);
-                    this.Exit();
+                    UpdateGameOverScreen(gameTime);
+                    //this.Exit();
                     break;
 
                 case GameScreens.GamePlay:
@@ -135,12 +136,38 @@ namespace Touchdown
             base.Update(gameTime);
         }
 
+        private void UpdateGameOverScreen(GameTime gameTime)
+        {
+            //When the game over screen is showing,
+            //a tap any where on the screen should start the game.
+            if (InputManager.IsNewTap)
+            {
+                //Set the current screen to the GamePlay screen
+                GameManager.GameScreen = GameScreens.GamePlay;
+
+                //Initialize the game values by calling StartGame():
+                StartGame();
+
+                //exit the method:
+                return;
+            }
+
+            //if the back button is pressed when the game over screen
+            //is showing, exit the game.
+            if (InputManager.IsBackButtonPressed)
+                this.Exit();
+        }
+
         /// <summary>
         /// Update the screen during game play
         /// </summary>
         /// <param name="gameTime"></param>
         private void UpdateGamePlayScreen(GameTime gameTime)
         {
+            // Allows the game to exit
+            if (InputManager.IsBackButtonPressed)
+                GameManager.GameScreen = GameScreens.Pause;
+
             GameManager.AdvanceLevel();
 
             field.Update(gameTime);
@@ -148,6 +175,25 @@ namespace Touchdown
             tacklers.Update(gameTime);
 
             CheckForCollisions();
+        }
+
+        private void UpdatePauseScreen(GameTime gameTime)
+        {
+            //When the pause screen is showing,
+            //a tap any where on the screen should resume the game.
+            if (InputManager.IsNewTap)
+            {
+                //Set the current screen to the GamePlay screen
+                GameManager.GameScreen = GameScreens.GamePlay;
+
+                //exit the method:
+                return;
+            }
+
+            //if the back button is pressed when the pause screen
+            //is showing, exit the game.
+            if (InputManager.IsBackButtonPressed)
+                this.Exit();
         }
 
         /// <summary>
@@ -166,20 +212,20 @@ namespace Touchdown
             tacklers.Draw(gameTime);
 
             DrawScore();
-            //switch (GameManager.GameScreen)
-            //{
-            //    case GameScreens.Welcome:
-            //        spriteBatch.Draw(welcomeScreen, Vector2.Zero, Color.White);
-            //        break;
+            switch (GameManager.GameScreen)
+            {
+                //case GameScreens.Welcome:
+                //    spriteBatch.Draw(welcomeScreen, Vector2.Zero, Color.White);
+                //    break;
 
-            //    case GameScreens.Pause:
-            //        spriteBatch.Draw(pauseScreen, Vector2.Zero, Color.White);
-            //        break;
+                case GameScreens.Pause:
+                    spriteBatch.Draw(pauseScreen, Vector2.Zero, Color.White);
+                    break;
 
-            //    case GameScreens.GameOver:
-            //        spriteBatch.Draw(gameOverScreen, Vector2.Zero, Color.White);
-            //        break;
-            //}
+                case GameScreens.GameOver:
+                    spriteBatch.Draw(gameOverScreen, Vector2.Zero, Color.White);
+                    break;
+            }
 
             spriteBatch.End();
             base.Draw(gameTime);
@@ -223,6 +269,7 @@ namespace Touchdown
                 if (!fe.IsAlive)
                 {
                     // The field graphic is no longer being used, so recycle it
+                    GameManager.Score += fe.PointValue;
                     field.RemoveAt(f);
                 }
             }
@@ -261,7 +308,6 @@ namespace Touchdown
         private void StartGame()
         {
             //Clear the collections:
-            field.Clear();
             tacklers.Clear();
             
             //Initialize the Robot. Center it

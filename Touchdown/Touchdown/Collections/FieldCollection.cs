@@ -43,13 +43,13 @@ namespace Touchdown.Collections
             this.Texture1 = texture1;
             this.Texture2 = texture2;
 
-            this.Add(new Field(SpriteBatch, texture1));
-            //this[0].Position.Y = GameManager.ScreenHeight - this[0].Height;
-            this[0].Position.Y = 0;
+            this.Add(GetInstance());
+            this[0].Position.Y = GameManager.ScreenHeight - this[0].Height;
+            //this[0].Position.Y = GameManager.ScreenBottom + ;
 
-            this.Add(new Field(SpriteBatch, texture2));
-            //this[1].Position.Y = this[0].Position.Y - (this[1].Height + 1);
-            this[1].Position.Y = (this[0].Height + 1);
+            this.Add(GetInstance());
+            this[1].Position.Y = this[0].Position.Y - (this[1].Height + 1);
+            //this[1].Position.Y = (this[0].Height + 1);
         }
 
      /// <summary>
@@ -63,33 +63,39 @@ namespace Touchdown.Collections
 
             //Test to see if it is "time" to create a new StickMan
             //and there aren't already too many stickmen...
-           if ((this.Count == 0) || (this[this.Count - 1].Position.Y == 0))
+            if ((this.Count < 2) || (this[this.Count - 1].Position.Y == 0))
             {
                 //We need a Random Number generator for few things
                 Random rnd = new Random();
 
-                //Create a new StickMan instance, pass in the sprite batch and texture
-                Field field = new Field(this.SpriteBatch, this.CurrentTexture);
-
-                //Let each StickMan be fatal to the runner if they collide
-                field.IsFatal = false;
-                field.Damage = 0;
-                field.LivesRemaining = 1;
-
-                //Allow 100 points to be added to the score each time a StickMan is killed.
-                field.PointValue = 10;
-
-                //Position the tackler just off the top of the screen
-                field.Position.Y = -field.Height;
-
-                //Randomly decided the horizontal direction. -1 = left, +1 = right
-                //int horizontalDirection = rnd.Next(2) == 1 ? -1 : +1;
-
                 //Ok, the StickMan is ready for battle. Add them to the collection
-                this.Add(field);
-                if (_currentTexture == 1) _currentTexture = 2;
-                else _currentTexture = 1;
+                this.Add(GetInstance());
             }
+        }
+
+        public Field GetInstance()
+        {
+            //Create a new StickMan instance, pass in the sprite batch and texture
+            Field field = new Field(this.SpriteBatch, this.CurrentTexture);
+
+            //Let each StickMan be fatal to the runner if they collide
+            field.IsFatal = false;
+            field.Damage = 0;
+            field.LivesRemaining = 1;
+
+            //Allow 100 points to be added to the score each time a StickMan is killed.
+            field.PointValue = 10;
+
+            //Position the tackler just off the top of the screen
+            field.Position.Y = -field.Height;
+
+            //Randomly decided the horizontal direction. -1 = left, +1 = right
+            //int horizontalDirection = rnd.Next(2) == 1 ? -1 : +1;
+
+            if (_currentTexture == 1) _currentTexture = 2;
+            else _currentTexture = 1;
+
+            return field;
         }
 
         /// <summary>
