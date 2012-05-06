@@ -78,7 +78,7 @@ namespace Touchdown
             field = new FieldCollection(spriteBatch, this.Content.Load<Texture2D>("Images/BackgroundLight"), this.Content.Load<Texture2D>("Images/BackgroundDark"));
             tacklers = new TacklerCollection(spriteBatch, this.Content.Load<Texture2D>("Images/Tackler"));
 
-            blockers = new BlockerCollection(spriteBatch, this.Content.Load<Texture2D>("Images/Runner"));
+            blockers = new BlockerCollection(spriteBatch, this.Content.Load<Texture2D>("Images/Blocker"));
 
             runner = new Runner(spriteBatch, this.Content.Load<Texture2D>("Images/Runner"));
 
