@@ -90,7 +90,7 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\WPU HandsOnLabs\Framework\Framework.csproj">
+    <ProjectReference Include="..\..\Framework\Framework.csproj">
       <Project>{6C9729CA-63E2-451E-B1F3-F06189A21D26}</Project>
       <Name>Framework</Name>
     </ProjectReference>
